@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletApp", "WalletApp\WalletApp.csproj", "{8AB87236-E327-4B9A-ADB5-AE1865410002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletApp.Core", "WalletApp.Core\WalletApp.Core.csproj", "{05AA352A-B621-4A2A-9D44-0F248B1A54F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletApp.DataLayerMock", "WalletApp.DataLayerMock\WalletApp.DataLayerMock.csproj", "{F965B821-734D-4C67-AFB4-7E4963BBA77F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AB87236-E327-4B9A-ADB5-AE1865410002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AB87236-E327-4B9A-ADB5-AE1865410002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AB87236-E327-4B9A-ADB5-AE1865410002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AB87236-E327-4B9A-ADB5-AE1865410002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05AA352A-B621-4A2A-9D44-0F248B1A54F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05AA352A-B621-4A2A-9D44-0F248B1A54F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05AA352A-B621-4A2A-9D44-0F248B1A54F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05AA352A-B621-4A2A-9D44-0F248B1A54F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F965B821-734D-4C67-AFB4-7E4963BBA77F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F965B821-734D-4C67-AFB4-7E4963BBA77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F965B821-734D-4C67-AFB4-7E4963BBA77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F965B821-734D-4C67-AFB4-7E4963BBA77F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
