@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WalletApp.Extensions;
 
 namespace WalletApp.Validation
 {
@@ -20,7 +21,23 @@ namespace WalletApp.Validation
                 return;
             }
 
-            if (value is not Guid str || str == Guid.Empty)
+            Guid guid;
+
+            if (value is Guid g)
+            {
+                guid = g;
+            }
+            else if (value is string str && str.TryToGuid(out var parsed))
+            {
+                guid = parsed;
+            }
+            else
+            {
+                context.Result = new BadRequestObjectResult($"{_paramName} must be a valid GUID.");
+                return;
+            }
+
+            if (guid == Guid.Empty)
             {
                 context.Result = new BadRequestObjectResult($"{_paramName} must be a valid GUID.");
             }

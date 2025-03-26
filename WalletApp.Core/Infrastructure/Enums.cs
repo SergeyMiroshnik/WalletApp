@@ -10,6 +10,6 @@
     public enum TransactionState
     {
         Accepted = 0,
-        Declined
+        Rejected
     }
 }

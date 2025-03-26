@@ -4,28 +4,32 @@ using WalletApp.Core.Models;
 
 namespace WalletApp.DataLayerMock.Repositories
 {
-    public class TransactionRepository : ITransactionRepository
+    /// <summary>
+    /// There is no sense to make the in-memory structures completely asynchronous so for this mock it is enough to add the stucture Task.FromResult(....)
+    /// </summary>
+    public class TransactionRepositoryMock : ITransactionRepository
     {
         private static ConcurrentDictionary<Guid, List<Transaction>> _transactions = new();
-        public TransactionRepository() { }
+        public TransactionRepositoryMock() { }
 
-        public async Task<List<Transaction>> GetAllAsync(Guid walletId)
+        public Task<List<Transaction>> GetAllAsync(Guid walletId)
         {
-            return _transactions.TryGetValue(walletId, out var result) ?
+            var res = _transactions.TryGetValue(walletId, out var result) ?
                 result :
                 new List<Transaction>();
+            return Task.FromResult(res);
         }
 
-        public async Task<Transaction> GetTransactionAsync(Guid walletId, Guid trId)
+        public Task<Transaction> GetTransactionAsync(Guid walletId, Guid trId)
         {
             var playerTransactions = _transactions.GetOrAdd(walletId, _ => new());
             lock (playerTransactions)
             {
-                return playerTransactions.FirstOrDefault(tr => tr.Id == trId);
+                return Task.FromResult(playerTransactions.FirstOrDefault(tr => tr.Id == trId));
             }
         }
 
-        public async Task<bool> AddAsync(Guid walletId, Transaction transaction)
+        public Task<bool> AddAsync(Guid walletId, Transaction transaction)
         {
             try
             {
@@ -33,18 +37,13 @@ namespace WalletApp.DataLayerMock.Repositories
                 lock (playerTransactions)
                 {
                     playerTransactions.Add(transaction);
-                    return true;
+                    return Task.FromResult(true);
                 }
             }
             catch
             {
-                return false;
+                return Task.FromResult(false);
             }
-        }
-
-        public Task<bool> UpdateAsync(Transaction transaction)
-        {
-            throw new NotImplementedException();
         }
     }
 }

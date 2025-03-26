@@ -2,6 +2,7 @@
 using WalletApp.Core.Infrastructure;
 using WalletApp.Core.Interfaces.Repositories;
 using WalletApp.Core.Models;
+using WalletApp.Extensions;
 using WalletApp.Interfaces.Services;
 using WalletApp.Mappers;
 using WalletApp.Models;
@@ -41,14 +42,16 @@ namespace WalletApp.Services
 
         public async Task<TransactionState> MakeTransaction(InputTransaction inputTransaction)
         {
-            var playerLock = _playersLocks.GetOrAdd(inputTransaction.PlayerId, _ => new SemaphoreSlim(1, 1));
+            Guid playerId = inputTransaction.PlayerId.ToGuid();
+
+            var playerLock = _playersLocks.GetOrAdd(playerId, _ => new SemaphoreSlim(1, 1));
 
             await playerLock.WaitAsync();
 
             try
             {
-                var wallet = await GetWalletSafe(inputTransaction.PlayerId);
-                var transaction = await _transactionRepository.GetTransactionAsync(wallet.Id, inputTransaction.Id);
+                var wallet = await GetWalletSafe(playerId);
+                var transaction = await _transactionRepository.GetTransactionAsync(wallet.Id, inputTransaction.Id.ToGuid());
                 if (transaction != null)
                     return transaction.State;
 
@@ -64,7 +67,7 @@ namespace WalletApp.Services
                     case TransactionType.Stake:
                         if (wallet.Balance < transaction.Amount)
                         {
-                            transaction.State = TransactionState.Declined;
+                            transaction.State = TransactionState.Rejected;
                             transaction.ErrorText = "Transaction couldn't be done. Stake amount will make the balance negative";
                         }
                         else
@@ -81,7 +84,7 @@ namespace WalletApp.Services
             }
             catch
             {
-                return TransactionState.Declined;
+                return TransactionState.Rejected;
             }
             finally
             {

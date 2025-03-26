@@ -1,0 +1,20 @@
+Bonus questions (just think how would you solve production grade implementation if):
+
+1. you need to optimize for heavy reads (much more "get player's balance" API calls than "credit transaction" calls)
+
+The simplest decision is to ensure proper indexing in the database - adding an index to the playerId field in the Wallet table, which improves lookup performance for balance reads.
+A more effective approach is caching player balances. Since balance updates happen great less frequently then readings, we can cache the balances (for example using MemoryCache) and update the cache only 
+in the case of the successfull transaction.
+To avoid the lockings (it will be useful in the case of the multinode deployment) we can also use some queue services (say RabbitMQ) to asynchronously update the balances after a transaction is successfully(!) processed.
+
+
+
+2. you should support multi node deployment for distributing load
+
+In multi node deployment the biggest challenge is data consistency across all nodes.
+First of all it is desirable to store all shared data (like the balance in our case) to a centralized and consistent storage like a database or a distributed cache (say Redis).
+In-memory structures for saving data like dictionaries or locks can't be used anymore because they are isolated per an instance.
+To avoid the duplicating of transaction processing across nodes idempotent behavior becomes critical (idempotent behavior was already realized in the test solution).
+To serialize the concurrent transactions of the same player across nodes we should use distributed locks (say Redis-based Redlock). Or we can implement the event queues technologie (say Kafka or RabbitMQ) 
+that ensure the transactions are processed sequentially per a player.
+For the case of the balance cahcing we should use the shared cache (like Redis) that will update the balance immediately after the (and only) successful transaction so all nodes will be synchronized.

@@ -1,4 +1,6 @@
-﻿using WalletApp.Core.Models;
+﻿using WalletApp.Core.Infrastructure;
+using WalletApp.Core.Models;
+using WalletApp.Extensions;
 using WalletApp.Models;
 
 namespace WalletApp.Mappers
@@ -10,9 +12,9 @@ namespace WalletApp.Mappers
             return new Transaction
             {
                 Amount = inputTransaction.Amount,
-                Id = inputTransaction.Id,
+                Id = inputTransaction.Id.ToGuid(),
                 WalletId = walletId,
-                Type = inputTransaction.Type
+                Type = Enum.Parse<TransactionType>(inputTransaction.Type, true)
             };
         }
 

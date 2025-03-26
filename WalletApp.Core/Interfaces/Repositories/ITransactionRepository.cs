@@ -7,6 +7,5 @@ namespace WalletApp.Core.Interfaces.Repositories
         Task<List<Transaction>> GetAllAsync(Guid walletId);
         Task<Transaction> GetTransactionAsync(Guid walletId, Guid trId);
         Task<bool> AddAsync(Guid walletId, Transaction transaction);
-        Task<bool> UpdateAsync(Transaction transaction);
     }
 }

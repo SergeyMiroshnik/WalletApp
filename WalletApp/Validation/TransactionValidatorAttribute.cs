@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Reflection;
+using WalletApp.Extensions;
 
 namespace WalletApp.Validation
 {
@@ -26,14 +27,30 @@ namespace WalletApp.Validation
                 foreach (var propertyName in _propertyNames)
                 {
                     var prop = argument.Value.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-                    if (prop == null || prop.PropertyType != typeof(Guid))
+                    if (prop == null)
                     {
-                        context.Result = new BadRequestObjectResult($"Property '{propertyName}' must exist and be of type Guid.");
+                        context.Result = new BadRequestObjectResult($"Property '{propertyName}' must exist.");
                         return;
                     }
 
-                    var value = (Guid)prop.GetValue(argument.Value);
-                    if (value == Guid.Empty)
+                    var value = prop.GetValue(argument.Value);
+                    Guid guid;
+
+                    if (prop.PropertyType == typeof(Guid))
+                    {
+                        guid = (Guid)value;
+                    }
+                    else if (prop.PropertyType == typeof(string) && value is string str && str.TryToGuid(out var g))
+                    {
+                        guid = g;
+                    }
+                    else
+                    {
+                        context.Result = new BadRequestObjectResult($"{propertyName} must have a valid GUID value.");
+                        return;
+                    }
+
+                    if (guid == Guid.Empty)
                     {
                         context.Result = new BadRequestObjectResult($"Property '{propertyName}' cannot be empty Guid.");
                         return;

@@ -13,7 +13,7 @@ namespace WalletApp.Extensions
             services.AddTransient<IWalletService, WalletService>();
 
             // repositories
-            services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepositoryMock>();
             services.AddScoped<IWalletRepository, WalletRepository>();
 
             return services;

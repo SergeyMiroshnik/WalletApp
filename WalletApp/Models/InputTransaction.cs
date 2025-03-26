@@ -1,12 +1,10 @@
-﻿using WalletApp.Core.Infrastructure;
-
-namespace WalletApp.Models
+﻿namespace WalletApp.Models
 {
     public class InputTransaction
     {
-        public Guid Id { get; set; }
-        public Guid PlayerId { get; set; }
-        public TransactionType Type { get; set; }
+        public string Id { get; set; }
+        public string PlayerId { get; set; }
+        public string Type { get; set; } = string.Empty;
         public decimal Amount { get; set; }
     }
 }
